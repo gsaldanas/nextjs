@@ -14,8 +14,8 @@ const handler = async (req, res) => {
   const { input, message } = JSON.parse(req.body);
   if (req.method === "POST") {
     await transporter.sendMail({
-      from: '"David Verhulst" <info@s1.syntradeveloper.be>', // sender address
-      to: "info@s1.syntradeveloper.be", // list of receivers
+      from: '"Ghost FOO" <info@s13.syntradeveloper.be>', // sender address
+      to: "info@s13.syntradeveloper.be", // list of receivers
       subject: input, // Subject line
       text: message, // plain text body
       html: message, // html body
