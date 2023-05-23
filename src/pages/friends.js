@@ -1,56 +1,59 @@
-import { useState } from "react";
-import db from "../db";
+import db from "@/db";
 import { nest } from "@/helpers";
+import { useState } from "react";
+
 const Friends = ({ friends }) => {
   const [input, setInput] = useState("");
   const [area, setArea] = useState("");
   const submitHandler = async (e) => {
     e.preventDefault();
-   await fetch('/api/mail',{
-    method: "POST",
-    body: JSON.stringify({
-      input: input,
-      message: area
-    })
-   })
+    await fetch("/api/mail", {
+      method: "POST",
+      body: JSON.stringify({
+        input: input,
+        message: area,
+      }),
+    });
+    setInput("");
+    setArea("");
   };
   return (
-    <>
+    <div>
+      <h1>Data from mysql</h1>
       <div>
-        <h1>Data from MySQL</h1>
-        <ul>
-          {friends.map(({ id, name, age, hobbies }) => (
-            <details key={id}>
-              <summary>
-                {name} - {age}
-              </summary>
-              <ul>
-                {hobbies &&
-                  Object.values(hobbies).map(({ id, name }) => (
-                    <li key={id}>{name}</li>
-                  ))}
-              </ul>
-            </details>
-          ))}
-        </ul>
+        {friends.map(({ id, name, age, hobbies }) => (
+          <details key={id}>
+            <summary>
+              {name} - {age}
+            </summary>
+            <ul>
+              {hobbies.map(({ id, name }) => (
+                <li key={id}>{name}</li>
+              ))}
+            </ul>
+          </details>
+        ))}
       </div>
       <div>
+        <h1>Mailform using embedded nextjs api</h1>
         <form action="" onSubmit={submitHandler}>
           <input
             type="text"
             name="subject"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-          />
+          />{" "}
+          <br />
           <textarea
             name="message"
-            value={area}
             onChange={(e) => setArea(e.target.value)}
-          ></textarea>
+            value={area}
+          ></textarea>{" "}
+          <br />
           <input type="submit" value="sendmail" />
         </form>
       </div>
-    </>
+    </div>
   );
 };
 
@@ -83,41 +86,41 @@ export async function getStaticProps() {
       ],
     },
   ];
-
+  // console.log(friendsData);
   const friends = nest(friendsData, friendsDefinition);
-  //   // Fetch friends' data from the "Friends" table
-  //   const friends = await db.select("id", "name", "age").from("friends");
+  // console.log(friends);
 
-  //   // Initialize an empty object to store friend-hobby relationships
-  //   const friendHobbies = {};
+  // const friends = (await db.select("*").from("friends"));
+  // const friendsWithHobbies = await Promise.all(
+  //   friends.map(async (f) => ({
+  //     ...f,
+  //     hobbies: await db("friends_has_hobbies")
+  //       .join("hobbies", "hobbies.id", "friends_has_hobbies.hobbies_id")
+  //       .select("hobbies.hobby", "hobbies.id")
+  //       .where("friends_has_hobbies.friends_id", f.id),
+  //   }))
+  // );
 
-  //   // Fetch friend-hobby relationship data from the "Friends_has_Hobbies" table
-  //   const friendsHasHobbies = await db
-  //     .select("friends_id", "hobbies_id")
-  //     .from("friends_has_hobbies");
+  // const friends = await db
+  // .select(
+  //   'f.id',
+  //   'f.name',
+  //   'f.age',
+  //   db.raw(
+  //     'JSON_ARRAYAGG(JSON_OBJECT("id",h.id, "hobby", h.hobby)) as hobbies'
+  //   )
+  // )
+  // .from('friends as f')
+  // .leftJoin('friends_has_hobbies as fh', 'f.id', '=', 'fh.friends_id')
+  // .leftJoin('hobbies as h', 'h.id', '=', 'fh.hobbies_id')
+  // .groupBy('f.id');
 
-  //   // Fetch hobbies' data from the "Hobbies" table
-  //   const hobbies = await db.select("id", "hobby").from("hobbies");
-
-  //   // Process friend-hobby relationships
-  //   friendsHasHobbies.forEach(({ friends_id, hobbies_id }) => {
-  //     // Check if the friend's ID exists as a key in the "friendHobbies" object
-  //     if (!friendHobbies[friends_id]) {
-  //       // If the key doesn't exist, initialize an empty array for the friend's hobbies
-  //       friendHobbies[friends_id] = [];
-  //     }
-
-  //     // Find the corresponding hobby object using the hobby's ID
-  //     const hobby = hobbies.find((h) => h.id === hobbies_id);
-
-  //     // If a hobby object is found, push it into the array associated with the friend's ID
-  //     if (hobby) {
-  //       friendHobbies[friends_id].push(hobby);
-  //     }
-  //   });
+  // console.log(friendsWithHobbies);
 
   return {
-    props: { friends },
+    props: {
+      friends,
+    },
     revalidate: 60,
   };
 }
