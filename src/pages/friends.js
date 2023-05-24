@@ -35,7 +35,7 @@ const Friends = ({ friends }) => {
         ))}
       </div>
       <div>
-        <h1>Mailform using embedded nextjs api</h1>
+        <h1>Mailform using embedded nextjs api, develop</h1>
         <form action="" onSubmit={submitHandler}>
           <input
             type="text"
