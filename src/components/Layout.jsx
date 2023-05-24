@@ -25,6 +25,9 @@ const Layout = ({ children }) => {
           <li>
             <Link href="/friends">Friends</Link>
           </li>
+          <li>
+            <Link href="/images">Images</Link>
+          </li>
 
         </ul>
       </nav>
