@@ -1,5 +1,7 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 const Layout = ({ children }) => {
+  const { locale, locales, asPath } = useRouter();
   return (
     <main>
       <nav>
@@ -28,8 +30,22 @@ const Layout = ({ children }) => {
           <li>
             <Link href="/images">Images</Link>
           </li>
-
+          <li>
+            <Link href="/translation">Translation</Link>
+          </li>
         </ul>
+        <ol>
+          {locales.map((l) => (
+            <li key={l}>
+              <Link 
+              href={asPath}
+              className={locale === l  ? "active": ""}
+              locale={l}>
+                {l}
+              </Link>
+            </li>
+          ))}
+        </ol>
       </nav>
       {children}
     </main>

@@ -35,7 +35,7 @@ const Friends = ({ friends }) => {
         ))}
       </div>
       <div>
-        <h1>Mailform using embedded nextjs api, develop</h1>
+        <h1>Mailform using embedded nextjs api</h1>
         <form action="" onSubmit={submitHandler}>
           <input
             type="text"
@@ -59,7 +59,7 @@ const Friends = ({ friends }) => {
 
 export default Friends;
 
-export async function getStaticProps() {
+export async function getStaticProps({ locale }) {
   const friendsData = await db("friends_has_hobbies")
     .join("friends", "friends.id", "friends_has_hobbies.friends_id")
     .join("hobbies", "hobbies.id", "friends_has_hobbies.hobbies_id")
@@ -68,7 +68,7 @@ export async function getStaticProps() {
       "friends.name",
       "friends.age",
       "friends.image",
-      "hobbies.hobby",
+      db.raw(`IFNULL(NULLIF(hobbies.hobby_${locale}, ''), hobbies.hobby_nl) AS hobby`),
       "hobbies.id AS hobbyId"
     );
 

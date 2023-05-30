@@ -1,4 +1,7 @@
 import slugify from "slugify";
+import { useRouter } from "next/router";
+import translations from "@/i18n";
+
 export const slug = (str) =>
   slugify(str, {
     replacement: "-", // replace spaces with replacement character, defaults to `-`
@@ -8,6 +11,10 @@ export const slug = (str) =>
     locale: "vi", // language code of the locale to use
     trim: true, // trim leading and trailing replacement chars, defaults to `true`
   });
+const NestHydrationJS = require("nesthydrationjs")();
+export const nest = NestHydrationJS.nest;
 
-  const NestHydrationJS = require("nesthydrationjs")();
-  export const nest = NestHydrationJS.nest;
+export const useTranslation = () => {
+  const { locale } = useRouter();
+  return (str) => translations[locale][str];
+};
