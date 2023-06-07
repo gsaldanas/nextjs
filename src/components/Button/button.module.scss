@@ -1,0 +1,24 @@
+.padding {
+  padding: 0.5rem 1rem;
+}
+.btn {
+  background-color: #f20dd7;
+  color: white;
+  border-radius: 5px;
+  font-size: 1.25rem;
+  border: solid 1px black;
+  transition: background 300ms ease;
+  cursor: pointer;
+
+  &.active {
+    background-color: #0df228;
+    padding: 1rem;
+  }
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+  &.secondary {
+    border: red solid 2px;
+  }
+}
